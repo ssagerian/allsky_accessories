@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wiringPi>
+#include <wiringPi.h>
 
 #include "dew_heater_control.h"
 #define DH_PIN 0
@@ -16,6 +16,7 @@ int main(void)
 
    wiringPiSetup();
    pinMode(DH_PIN, OUTPUT);
+   digitalWrite(DH_PIN,LOW);
 
    memset(local_var, 0,20);
    char * p_get_env = NULL;
@@ -39,12 +40,12 @@ int main(void)
          printf("my env is set to %s \n", p_get_env);
          memset(local_var, 0,20);
          strcpy(local_var, p_get_env);
-	 digiitalWrite(DH_PIN,HIGH);
+	 digitalWrite(DH_PIN,HIGH);
 	 delay(500);
       }
       else
       {
-	 digiitalWrite(DH_PIN,LOW);
+	 digitalWrite(DH_PIN,LOW);
 	 delay(500);
       }
    }
