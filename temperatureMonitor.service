@@ -3,12 +3,12 @@ Description=Temperature Monitor Service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/ssagerian/allsky/temperatureMonitor.py
+ExecStart=/usr/bin/python3 /home/pi/allsky/temperatureMonitor.py
 Restart=always
-User=ssagerian
-Group=ssagerian
+User=pi
+Group=pi
 KillMode=mixed
-WorkingDirectory=/home/ssagerian/allsky
+WorkingDirectory=/home/pi/allsky
 
 [Install]
 WantedBy=multi-user.target

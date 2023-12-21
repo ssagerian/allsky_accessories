@@ -69,10 +69,8 @@ def main():
         # Round values to one significant digit
         temperature_rounded = round(temperature, 1)
         humidity_rounded = round(humidity, 1)
-
-        # Write data to a file
         # this needs to change based on actual path
-        file_path = '/home/ssagerian/allsky/addons/sensor_data.json'
+        file_path = '/home/pi/allsky/config/overlay/extra/sensor_data.json'
 
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
         sensor_data = SensorData(temperature_rounded, humidity_rounded, 'ON', 'ON')
