@@ -1,6 +1,8 @@
 
 import time
 import smbus
+import json
+import syslog
 
 address = 0x40
 temperatureCmd = 0xF3
@@ -8,11 +10,27 @@ humidityCmd = 0xF5
 
 bus = smbus.SMBus(1)
 
+# init chip
 bus.write_byte(address, 0xFE) # reset sensor
-
 time.sleep(1)
 bus.write_byte_data(address,0xE6, 0x3B) # heater on Temp Resolution == 12 bits, RH= 8 bits
-#teste = bus.read_word_data(address,0xE5);
+
+# class for holding sensor data and converting to json
+class SensorData:
+    def __init__(self, temperature, humidity, dew_heater_status, fan_status):
+        self.data_dict = {}
+        self.data_dict['HS_TIME_STAMP'] = {'value': 0}
+        self.data_dict['HS_TEMPERATURE'] = {'value': temperature, 'expires': 600}
+        self.data_dict['HS_HUMIDITY'] = {'value': humidity, 'expires': 600}
+        self.data_dict['HS_DEW_HEATER_STATUS'] = {'value': dew_heater_status, 'expires': 600}
+        self.data_dict['HS_FAN_STATUS'] = {'value': fan_status, 'expires': 600}
+
+    def get_data_json(self):
+        return json.dumps(self.data_dict, indent=2)
+
+    def save_to_json(self, filename):
+        with open(filename, 'w') as json_file:
+            json.dump(self.data_dict, json_file, indent=4)
 
 
 def getTemperature():
@@ -54,15 +72,21 @@ def main():
 
         # Write data to a file
         # this needs to change based on actual path
-        file_path = '/home/pi/allsky/addons/addion_file.txt'
-        with open(file_path, 'a') as file:
-            timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-            file.write(f"{timestamp} - Temperature: {temperature_rounded} °C, Humidity: {humidity_rounded}%\n")
-            print(f"{timestamp} - Temperature: {temperature} °F, Humidity: {humidity}%\n")
+        file_path = '/home/ssagerian/allsky/addons/sensor_data.json'
+
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        sensor_data = SensorData(temperature_rounded, humidity_rounded, 'ON', 'ON')
+        sensor_data.data_dict['HS_TIME_STAMP'] = timestamp
+        # Update data dictionary
+        sensor_data.save_to_json(file_path)
+        syslog.syslog(syslog.LOG_INFO, f"Allsky Temperature: {temperature_rounded} F")
+        #with open(file_path, 'a') as file:
+        #    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        #    file.write(f"{timestamp} - Temperature: {temperature_rounded} °C, Humidity: {humidity_rounded}%\n")
+        #    print(f"{timestamp} - Temperature: {temperature} °F, Humidity: {humidity}%\n")
 
         # Sleep for a minute
         time.sleep(60)
-
 
 if __name__ == "__main__":
     main()

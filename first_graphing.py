@@ -4,15 +4,19 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
 class SensorData:
-    def __init__(self):
+    def __init__(self,temperature, humidity, dew_heater_status, fan_status):
         self.data_dict = {}
-        self.data_dict['HS_TEMPERATURE'] = {'value': 0, 'expires': 600}
-        self.data_dict['HS_HUMIDITY'] = {'value': 0, 'expires': 600}
-        self.data_dict['HS_DEW_HEATER_STATUS'] = {'value': 'OFF', 'expires': 600}
-        self.data_dict['HS_FAN_STATUS'] = {'value': 'OFF', 'expires': 600}
-
+        self.data_dict['HS_TEMPERATURE'] = {'value':temperature , 'expires': 600}
+        self.data_dict['HS_HUMIDITY'] = {'value': humidity, 'expires': 600}
+        self.data_dict['HS_DEW_HEATER_STATUS'] = {'value': dew_heater_status, 'expires': 600}
+        self.data_dict['HS_FAN_STATUS'] = {'value': fan_status, 'expires': 600}
     def get_data_json(self):
         return json.dumps(self.data_dict, indent=2)
+
+    def save_to_json(self, filename):
+        with open(filename, 'w') as json_file:
+            json.dump(self.data_dict, json_file, indent=4)
+
 
 # Function to read temperature, humidity, dew heater status, and fan status
 def read_sensor_data():
@@ -75,7 +79,9 @@ def main():
         # Read sensor data
         temperature, humidity, dew_heater_status, fan_status = read_sensor_data()
 
+        sensor_data = SensorData(temperature, humidity, 'ON', 'ON')
         # Update data dictionary
+        sensor_data.save_to_json("")
         update_dict(data_dict, temperature, humidity, dew_heater_status, fan_status)
         update_json(data_dict, temperature, humidity, dew_heater_status, fan_status)
 
