@@ -23,20 +23,16 @@ install smbus2 which is used by temperatureMonitor.py to read the si7020 I2C chi
 * sudo apt-get install i2c-tools
 * sudo i2cdetect -y 1   # Use -y 0 for bus 0
 
-= setup of the temperatureMonitory service
-==Create a service file in /etc/systemd/system/allsky_accessories.service:
-[Unit]
-Description=Allsky accessory controller
-After=network.target
+=Setup of the temperatureMonitory service
+* copy the temperatureMonitory.service to /etc/systemd/system/
+* enable the service
+** sudo systemctl enable temperatureMonitor
+* start the service
+** sudo systemctrl start temperatureMonitor
+* status the temperatureMonitor
+** sudo systemctrl status temperatureMonitor
 
-[Service]
-ExecStart=/usr/bin/python3 /home/pi/allsky/path/to/temperatureMonitor.py
-WorkingDirectory=/home/pi/allsky/
-Restart=always
-User=your_username
 
-[Install]
-WantedBy=multi-user.target
 
 
 
