@@ -21,10 +21,10 @@ class SensorData:
     def __init__(self, temperature, humidity, dew_heater_status, fan_status):
         self.data_dict = {}
         self.data_dict['HS_TIME_STAMP'] = {'value': 0}
-        self.data_dict['HS_TEMPERATURE'] = {'value': temperature, 'expires': 600}
-        self.data_dict['HS_HUMIDITY'] = {'value': humidity, 'expires': 600}
-        self.data_dict['HS_DEW_HEATER_STATUS'] = {'value': dew_heater_status, 'expires': 600}
-        self.data_dict['HS_FAN_STATUS'] = {'value': fan_status, 'expires': 600}
+        self.data_dict['HS_TEMPERATURE'] = {'value': temperature, 'expires': 60}
+        self.data_dict['HS_HUMIDITY'] = {'value': humidity, 'expires': 60}
+        self.data_dict['HS_DEW_HEATER_STATUS'] = {'value': dew_heater_status, 'expires': 60}
+        self.data_dict['HS_FAN_STATUS'] = {'value': fan_status, 'expires': 60}
 
     def get_data_json(self):
         return json.dumps(self.data_dict, indent=2)
