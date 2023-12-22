@@ -3,6 +3,7 @@ import time
 import smbus
 import json
 import syslog
+import pigpio
 
 address = 0x40
 temperatureCmd = 0xF3
@@ -61,7 +62,13 @@ def get_humidity_and_temperatureF():    # Call temperature and humidity function
     temperature = celiusToFahrenheit(temperature)
     return humidity, temperature
 #
+
 def main():
+    pi = pigpio.pi()
+    if not pi.connected:
+        syslog.syslog(syslog.LOG_INFO, f"Unable to connect to pigpio daemon. Exiting.")
+        exit()
+
     while True:
         # Call temperature and humidity functions
         humidity, temperature = get_humidity_and_temperatureF()
@@ -73,15 +80,25 @@ def main():
         file_path = '/home/pi/allsky/config/overlay/extra/sensor_data.json'
 
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        sensor_data = SensorData(temperature_rounded, humidity_rounded, 'ON', 'ON')
+        try:
+            if 1 == pi.read(18):
+                fan = "ON"
+            else:
+                fan = "OFF"
+            if 1 == pi.read(17):
+                heater = "ON"
+            else:
+                heater = "OFF"
+        except pigpio.error as e:
+            # Handle pigpio-specific exceptions
+            syslog.syslog(syslog.LOG_INFO, f"Allsky pigpio An error occurred: {e}")
+            exit()
+
+        sensor_data = SensorData(temperature_rounded, humidity_rounded, heater, fan)
         sensor_data.data_dict['HS_TIME_STAMP'] = timestamp
         # Update data dictionary
         sensor_data.save_to_json(file_path)
         syslog.syslog(syslog.LOG_INFO, f"Allsky Temperature: {temperature_rounded} F")
-        #with open(file_path, 'a') as file:
-        #    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        #    file.write(f"{timestamp} - Temperature: {temperature_rounded} °C, Humidity: {humidity_rounded}%\n")
-        #    print(f"{timestamp} - Temperature: {temperature} °F, Humidity: {humidity}%\n")
 
         # Sleep for a minute
         time.sleep(60)
