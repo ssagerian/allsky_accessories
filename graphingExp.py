@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def get_humidity_and_temperatureF():
     humidity = np.random.uniform(20, 90)
@@ -10,7 +10,14 @@ def get_humidity_and_temperatureF():
     return humidity, temperature
 
 def save_data_to_file(data, filename):
-    np.savetxt(filename, data, delimiter=',', fmt='%.2f', header='Humidity (%), Temperature (F)', comments='')
+    with open(filename, 'w') as file:
+        # Write header
+        file.write('Timestamp,Humidity (%),Temperature (F)\n')
+
+        # Write data
+        for data_point in data:
+            formatted_data_point = [f'{val:.3f}' if isinstance(val, (float, float)) else str(val) for val in data_point]
+            file.write(','.join(formatted_data_point) + '\n')
 
 # ...
 
@@ -23,7 +30,7 @@ def plot_and_save_data(data):
     # Convert timestamps to Python datetime objects
     timestamps = [datetime.strptime(ts, '%Y-%m-%d %H:%M:%S') for ts in timestamps]
 
-    fig, ax1 = plt.subplots(figsize=(12, 8))  # Create a figure with a single axes
+    fig, ax1 = plt.subplots(figsize=(10, 5), dpi=100)  # Set size to 8x5 inches at 100 dpi
 
     # Plot temperature on the left y-axis (ax1)
     color = 'tab:red'
@@ -35,7 +42,7 @@ def plot_and_save_data(data):
     tick_interval = 10  # You can adjust this interval as needed
     temperature_ticks = np.arange(min_temp, max_temp + 1, tick_interval)
 
-    ax1.plot(timestamps, temperatures, label='Temperature (F)', marker='o', color=color)
+    ax1.plot(timestamps, temperatures, label='Temperature (F)', marker='o', color=color, alpha=0.5, zorder=1)
     ax1.set_yticks(temperature_ticks)
     ax1.tick_params(axis='y', labelcolor=color)
 
@@ -48,7 +55,7 @@ def plot_and_save_data(data):
     # Plot humidity on the right y-axis (ax2)
     color = 'tab:blue'
     ax2.set_ylabel('Humidity (%)', color=color)
-    ax2.plot(timestamps, humidities, label='Humidity (%)', marker='o', color=color)
+    ax2.plot(timestamps, humidities, label='Humidity (%)', marker='o', color=color, alpha=0.5, zorder=2)
     ax2.tick_params(axis='y', labelcolor=color)
 
     # Format x-axis ticks to show only hours and minutes
@@ -62,8 +69,15 @@ def plot_and_save_data(data):
 
 # ...
 
+# ...
+
+import time
+
+# ...
+
 def main():
     data = []
+    save_interval = 120  # Time window in seconds (2 minutes)
 
     while True:
         humidity, temperature = get_humidity_and_temperatureF()
@@ -74,19 +88,30 @@ def main():
 
         print(f'Time: {timestamp.strftime("%Y-%m-%d %H:%M:%S")}, Humidity: {humidity}%, Temperature: {temperature:.2f}°F')
 
-        time.sleep(2)  # Reduced sleep time for testing
+        time.sleep(5)  # Reduced sleep time for testing
 
-        # Check if it's a new day to save data
-        if timestamp.strftime('%H:%M:%S') == '00:00:00':
+        # Check if it's within the time window to save data
+        target_time_start = datetime.strptime('12:59:00', '%H:%M:%S').time()
+        target_time_end = (datetime.strptime('12:59:00', '%H:%M:%S') +
+                           timedelta(seconds=save_interval)).time()
+
+        current_time = timestamp.time()
+        if target_time_start <= current_time <= target_time_end:
             save_data_to_file(data, 'temp_humidity_data.dat')
             print('Data saved to temp_humidity_data.dat')
 
             # Clear data for the new day
             data = []
+            # Wait until the time window is over
+            time.sleep(save_interval)
+        else:
+            # Create and save plot
+            plot_and_save_data(data)
+            print('Plot saved to temp_humidity_plot.png')
 
-        # Create and save plot
-        plot_and_save_data(data)
-        print('Plot saved to temp_humidity_plot.png')
+# ...
+
+# ...
 
 if __name__ == "__main__":
     main()
