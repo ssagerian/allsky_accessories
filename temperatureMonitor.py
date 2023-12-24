@@ -60,9 +60,10 @@ def plot_and_save_data(data):
     ax1.set_xticks(timestamps)
     ax1.set_xticklabels([dt.strftime('%H:%M') for dt in timestamps], rotation=45, ha='right')
 
+    plot_path = '/home/pi/allsky/config/overlay/images/temp_humidity_plot.png'
     plt.title('Temperature and Humidity Over Time')
     plt.tight_layout()  # Adjust layout for better spacing
-    plt.savefig('temp_humidity_plot.png', transparent=True)
+    plt.savefig(plot_path, transparent=True)
     plt.close()
 
 
@@ -115,7 +116,7 @@ def main():
         exit()
 
     save_interval = 30  # Time window in seconds
-    json_file_path = '/home/ssagerian/allsky/config/overlay/extra/sensor_data.json'
+    json_file_path = '/home/pi/allsky/config/overlay/extra/sensor_data.json'
     data = []
     todays_name: str = ""
 
