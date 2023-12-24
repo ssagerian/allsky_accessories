@@ -48,7 +48,15 @@ now mount the drive
 now check that the drive is active
 * df -h
 
-
+# Notes about temperature Monitor
+It now has the following functions
+* read temp and humidity from si7020 chip
+* stores those data items in a json file in the overlays/extra folder of the allsky system
+* plots the data onto a graph and saves the graph for the overlay
+* at midnite it saves all the temp, humidity with individual time stamps to the previous day's image folder
+  ** the intent here is that the T&H data will get archived with the images
+* at midnite it restarts accumulating T&H data for the current day
+* 
 
 
 
