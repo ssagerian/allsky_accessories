@@ -48,7 +48,7 @@ class si7020_I2C:
 
     def get_temperature(self):
         temp = self.bus.read_word_data(self.address, 0xE0)  # read temp from last humidity conversion
-        #temp = (temp / 256) + int((temp % 256) * 256)  # swap msb and lsb
+        temp = ((0x00FF & temp) << 8) + ((0xFF00 & temp) >> 8)
         temperature = ((175.72 * temp) / 65536) - 46.85
         return temperature
 
@@ -64,7 +64,7 @@ class si7020_I2C:
 
     def get_humidity(self):
         humd = self.bus.read_word_data(self.address, 0xE5)
-        #humd = int(humd / 256) + ((humd % 256) * 256)  # swap msb and lsb
+        humd = ((0x00FF & humd) << 8) + ((0xFF00 & humd) >> 8)
         humidity = ((125 * humd) / 65536) - 6
         return humidity
 
