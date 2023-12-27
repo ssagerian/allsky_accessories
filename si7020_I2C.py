@@ -31,12 +31,12 @@ class si7020_I2C:
                 self.bus.write_byte_data(self.address, 0xE6, 0x04)  # heater on Temp Resolution == 12 bits, RH= 8 bits
                 time.sleep(1)
                 read_data = self.bus.read_byte_data(self.address, 0xE7)  # read register 1
-                heater_state = heater_map.get(((read_data & 0x04) >> 3), "?")
+                heater_state = heater_map.get(((read_data & 0x04) >> 2), "?")
                 vdd_status = vdd_map.get(((read_data & 0x40) >> 5), "?")
                 rh_resolution = (read_data & 0x80) >> 6
                 temp_resolution = read_data & 0x01
                 resolution_description = resolution_mapping.get((rh_resolution, temp_resolution), "Unknown Resolution")
-                print(f"Si7020: VDD  {vdd_status} heater {heater_state} bit resolution {resolution_description}")
+                print(f"Si7020:VDD {vdd_status} heater {heater_state} bit resolution {resolution_description}")
                 syslog.syslog(syslog.LOG_INFO, f"Si7020:VDD {vdd_status} heater {heater_state} bit resolution {resolution_description}")
 
             except IOError as e:
@@ -64,7 +64,7 @@ class si7020_I2C:
 
     def get_humidity(self):
         humd = self.bus.read_word_data(self.address, 0xE5)
-        humd = int(humd / 256) + ((humd % 256) * 256)  # swap msb and lsb
+        #humd = int(humd / 256) + ((humd % 256) * 256)  # swap msb and lsb
         humidity = ((125 * humd) / 65536) - 6
         return humidity
 
