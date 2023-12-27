@@ -8,14 +8,14 @@ HUMIDITY_COMMAND = 0xF5
 
 
 class si7020_I2C:
-
-    resolution_mapping = {
-        (0, 0): "RH: 12 bit, Temp: 14 bit",
-        (0, 1): "RH: 8 bit, Temp: 12 bit",
-        (1, 0): "RH: 10 bit, Temp: 13 bit",
-        (1, 1): "RH: 11 bit, Temp: 11 bit",
-    }
     def __init__(self, address=0x40):
+        heater_map = { 0:"ON", 1:"OFF"}
+        resolution_mapping = {
+       	    (0, 0): "RH: 12 bit, Temp: 14 bit",
+            (0, 1): "RH: 8 bit, Temp: 12 bit",
+            (1, 0): "RH: 10 bit, Temp: 13 bit",
+            (1, 1): "RH: 11 bit, Temp: 11 bit",
+        }
         try:
             # Your existing initialization code here
 
@@ -27,21 +27,22 @@ class si7020_I2C:
                 # init chip
                 self.bus.write_byte(self.address, 0xFE)  # reset sensor
                 time.sleep(1)
-                self.bus.write_byte_data(self.address, 0xE6, 0x3B)  # heater on Temp Resolution == 12 bits, RH= 8 bits
-                read_data = self.bus.read_word_data(self.address, 0xE7)  # read register 1
-                heater_state =  read_data & 0x04
+                self.bus.write_byte_data(self.address, 0xE6, 0x04)  # heater on Temp Resolution == 12 bits, RH= 8 bits
+                time.sleep(1)
+                read_data = self.bus.read_byte_data(self.address, 0xE7)  # read register 1
+                heater_state =  heater_map.get(((read_data & 0x04)>>3),"?")
                 vdd_status = read_data & 0x40
                 rh_resolution = (read_data & 0x80) >> 6
                 temp_resolution = read_data & 0x01
-                resolution_description = self.resolution_mapping.get((rh_resolution, temp_resolution), "Unknown Resolution")
+                resolution_description = resolution_mapping.get((rh_resolution, temp_resolution), "Unknown Resolution")
                 print( f"VDD status {vdd_status} si7020 heater status {heater_state} bit resolution {resolution_description}" )
                 syslog.syslog(syslog.LOG_INFO, f"VDD status {vdd_status} si7020 heater status {heater_state} bit resolution {resolution_description}")
 
             except IOError as e:
-                print(f"Failed to initialize si7020 I2C device: {e}")
+                print(f"1 Failed to initialize si7020 I2C device: {e}")
                 exit(1)
         except Exception as e:
-            print(f"Error initializing si7020_I2C: {e}")
+            print(f"2 Error initializing si7020_I2C: {e}")
             exit(1)
 
     def get_temperature(self):
