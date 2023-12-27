@@ -1,11 +1,20 @@
 import smbus
 import time
+import syslog
+
 
 TEMPERATURE_COMMAND = 0xF3
 HUMIDITY_COMMAND = 0xF5
 
 
 class si7020_I2C:
+
+    resolution_mapping = {
+        (0, 0): "RH: 12 bit, Temp: 14 bit",
+        (0, 1): "RH: 8 bit, Temp: 12 bit",
+        (1, 0): "RH: 10 bit, Temp: 13 bit",
+        (1, 1): "RH: 11 bit, Temp: 11 bit",
+    }
     def __init__(self, address=0x40):
         try:
             # Your existing initialization code here
@@ -19,6 +28,15 @@ class si7020_I2C:
                 self.bus.write_byte(self.address, 0xFE)  # reset sensor
                 time.sleep(1)
                 self.bus.write_byte_data(self.address, 0xE6, 0x3B)  # heater on Temp Resolution == 12 bits, RH= 8 bits
+                read_data = self.bus.read_word_data(self.address, 0xE7)  # read register 1
+                heater_state =  read_data & 0x04
+                vdd_status = read_data & 0x40
+                rh_resolution = (read_data & 0x80) >> 6
+                temp_resolution = read_data & 0x01
+                resolution_description = self.resolution_mapping.get((rh_resolution, temp_resolution), "Unknown Resolution")
+                print( f"VDD status {vdd_status} si7020 heater status {heater_state} bit resolution {resolution_description}" )
+                syslog.syslog(syslog.LOG_INFO, f"VDD status {vdd_status} si7020 heater status {heater_state} bit resolution {resolution_description}")
+
             except IOError as e:
                 print(f"Failed to initialize si7020 I2C device: {e}")
                 exit(1)
