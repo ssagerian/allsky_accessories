@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from datetime import datetime, timedelta
+import atexit
 
 def sleep_until_next_minute():
     current_time = datetime.now()
@@ -85,7 +86,7 @@ def create_time_encoded_file_name(name):
 
     # Define the directory and filename format
     directory_format = "/home/pi/allsky/images/{}"
-    filename_format = "{}"+ name+ ".txt"
+    filename_format = "{}" + name + ".txt"
 
     # Combine the directory and filename using the current date
     directory_path = directory_format.format(current_date)
@@ -117,7 +118,7 @@ def main():
 
     save_interval = 30  # Time window in seconds
     json_file_path = '/home/pi/allsky/config/overlay/extra/sensor_data.json'
-    data = []
+
     todays_name: str = ""
 
     while True:
@@ -132,8 +133,7 @@ def main():
         # temp humidity and timestampe as its own data file
         data_point = [timestamp.strftime('%Y-%m-%d %H:%M:%S'), humidity, temperature]
         data.append(data_point)
-
-	# at midnight we start a new file
+        # at midnight we start a new file
         if check_time(save_interval):
             save_data_to_file(data, todays_name)
             # Clear data for the new day
@@ -169,6 +169,16 @@ def main():
 
         # Sleep for a minute
         sleep_until_next_minute()
+
+def shutdown_save():
+    todays_name = create_time_encoded_file_name("_temperature_humidity_data")
+    save_data_to_file(data, todays_name)
+    syslog.syslog(syslog.LOG_INFO, f"temperature monitor shutting down saving data to: {todays_name}")
+
+
+atexit.register(shutdown_save)
+
+data = []
 
 if __name__ == "__main__":
     main()

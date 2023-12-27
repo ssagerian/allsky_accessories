@@ -1,6 +1,8 @@
 [Unit]
 Description=Temperature Monitor Service
 After=network.target
+DefaultDependencies=no
+Before=reboot.target shutdown.target halt.target
 
 [Service]
 ExecStart=/usr/bin/python3 /home/pi/allsky/temperatureMonitor.py
@@ -11,4 +13,4 @@ KillMode=mixed
 WorkingDirectory=/home/pi/allsky
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target reboot.target shutdown.target halt.target
