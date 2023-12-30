@@ -13,6 +13,30 @@ import atexit
 # temperature and Humidity
 TandH_data = []
 
+
+def read_temperature_data_file():
+    file_name = f"temperatureMonitor_data_{datetime.now().strftime('%Y-%m-%d')}.txt"
+
+    try:
+        with open(file_name, 'r') as file:
+            lines = file.readlines()
+
+        # Skip the header line
+        lines = lines[1:]
+
+        data_points = []
+        for line in lines:
+            values = line.strip().split(',')
+            data_point = [float(val) if '.' in val else str(val) for val in values]
+            data_points.append(data_point)
+
+        return data_points
+
+    except FileNotFoundError:
+        print(f"The file '{file_name}' does not exist.")
+        return []
+
+
 def sleep_until_next_minute():
     current_time = datetime.now()
     next_minute = (current_time + timedelta(minutes=1)).replace(second=0, microsecond=0)
@@ -143,6 +167,9 @@ def main():
 
     todays_name: str = ""
 
+    # see if existing file is present and read it in or return empty list
+    TandH_data = read_temperature_data_file()
+
     while True:
         # Call temperature and humidity functions
         humidity, temperature = th_sensor.get_humidity_and_temperatureF()
@@ -194,7 +221,7 @@ def main():
         # Sleep for a minute
         sleep_until_next_minute()
 
-def shutdown_save( signal, stack_frame):
+def shutdown_save( signal=None, stack_frame=None):
     todays_name = create_time_encoded_file_name("_temperature_humidity_data")
     save_data_to_file(TandH_data, todays_name)
     syslog.syslog(syslog.LOG_INFO, f"temperature monitor shutting down saving data to: {todays_name}")
