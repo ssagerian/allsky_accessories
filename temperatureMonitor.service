@@ -11,6 +11,8 @@ User=pi
 Group=pi
 KillMode=mixed
 WorkingDirectory=/home/pi/allsky
+KillSignal=SIGTERM  # Specify the signal sent by systemctl stop (default is SIGTERM)
+TimeoutStopSec=30   # Specify the maximum time for the service to stop
 
 [Install]
 WantedBy=multi-user.target reboot.target shutdown.target halt.target
