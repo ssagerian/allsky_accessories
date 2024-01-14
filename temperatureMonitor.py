@@ -9,6 +9,7 @@ import os
 import signal
 from datetime import datetime, timedelta
 import atexit
+from matplotlib.dates import DateFormatter  # Correct import
 
 # temperature and Humidity
 TandH_data = []
@@ -57,21 +58,24 @@ def plot_and_save_image(data):
     # Convert timestamps to Python datetime objects
     timestamps = [datetime.strptime(ts, '%Y-%m-%d %H:%M:%S') for ts in timestamps]
 
-    fig, ax1 = plt.subplots(figsize=(10, 5), dpi=100)  # Set size to 8x5 inches at 100 dpi
+    fig, ax1 = plt.subplots(figsize=(10, 5), dpi=100)
 
     # Plot temperature on the left y-axis (ax1)
-    color = 'tab:red'
+    color_temp = 'tab:red'
     ax1.set_xlabel('Timestamp')
-    ax1.set_ylabel('Temperature (F)', color=color)
+    ax1.set_ylabel('Temperature (F)', color=color_temp)
 
     # Calculate uniform ticks for the temperature
     min_temp, max_temp = np.floor(min(temperatures)), np.ceil(max(temperatures))
-    tick_interval = 10  # You can adjust this interval as needed
-    temperature_ticks = np.arange(min_temp, max_temp + 1, tick_interval)
+    temperature_ticks = np.linspace(min_temp, max_temp, 10)
 
-    ax1.plot(timestamps, temperatures, label='Temperature (F)', marker='o', color=color, alpha=0.5, zorder=1)
+    # Set the y-axis limits for temperature
+    ax1.set_ylim(min_temp, max_temp + 1)
+    ax1.yaxis.set_major_locator(plt.FixedLocator(temperature_ticks))
     ax1.set_yticks(temperature_ticks)
-    ax1.tick_params(axis='y', labelcolor=color)
+    ax1.tick_params(axis='y', labelcolor=color_temp)
+
+    ax1.plot(timestamps, temperatures, label='Temperature (F)', marker='o', color=color_temp, alpha=0.5, zorder=1)
 
     # Create a second y-axis for humidity
     ax2 = ax1.twinx()
@@ -80,20 +84,37 @@ def plot_and_save_image(data):
     humidities = np.array([round(float(humidity)) for humidity in humidities], dtype=int)
 
     # Plot humidity on the right y-axis (ax2)
-    color = 'tab:blue'
-    ax2.set_ylabel('Humidity (%)', color=color)
-    ax2.plot(timestamps, humidities, label='Humidity (%)', marker='o', color=color, alpha=0.5, zorder=2)
-    ax2.tick_params(axis='y', labelcolor=color)
+    color_humidity = 'tab:blue'
+    ax2.set_ylabel('Humidity (%)', color=color_humidity)
+
+    # Set y-axis limits and ticks for humidity
+    min_humidity, max_humidity = 0, 100
+    tick_interval_humidity = 10
+    humidity_ticks = np.arange(min_humidity, max_humidity + 1, tick_interval_humidity)
+
+    ax2.set_ylim(min_humidity, max_humidity)
+    ax2.plot(timestamps, humidities, label='Humidity (%)', marker='o', color=color_humidity, alpha=0.5, zorder=2)
+    ax2.set_yticks(humidity_ticks)
+    ax2.tick_params(axis='y', labelcolor=color_humidity)
 
     # Format x-axis ticks to show only hours and minutes
-    ax1.set_xticks(timestamps)
-    ax1.set_xticklabels([dt.strftime('%H:%M') for dt in timestamps], rotation=45, ha='right')
+    ax1.xaxis.set_major_locator(plt.MaxNLocator(10, prune='both'))
+    ax1.xaxis.set_major_formatter(DateFormatter('%H:%M:%S'))
 
-    plot_path = '/home/pi/allsky/config/overlay/images/temp_humidity_plot.png'
+    # Set x-axis tick labels to yellow
+    ax1.tick_params(axis='x', colors='yellow')
+
+    # Provide the full path to save the file in the specified directory
+    save_path = '/home/pi/allsky/config/overlay/images/temp_humidity_plot.png'
+
+    # Ensure the directory exists before saving
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
     plt.title('Temperature and Humidity Over Time')
-    plt.tight_layout()  # Adjust layout for better spacing
-    plt.savefig(plot_path, transparent=True)
+    plt.tight_layout()
+    plt.savefig(save_path, transparent=True)
     plt.close()
+
 
 
 def check_time(save_interval):
