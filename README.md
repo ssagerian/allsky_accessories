@@ -7,6 +7,41 @@ A software service called temperatureMonitor.py sleeps for a minute then reads t
 * Fan is on GPIO 18 (broadcom #) which controls a FET switch to 5VDC fan 
 * Si7020 uses I2C bus 1 (3.3 VDC device)
 
+
+
+| funct  | Pin                | Pin    | funct  |
+|--------|--------------------|--------|--------|
+| 3.3VDC | 1                  | 2      | 5VDC   |
+| SDA    | 3                  | 4      | 5VDC   |
+| SCL   | 5                  | 6      | ...   |
+| ...    | 7                | 8    | ...    |
+| GND    | 9                | 10    | ...    |
+| HEATER    | 11                | 12    | FAN    |
+| ...    | 13                | 14    | GND    |
+| ...    | 15                | 16    | ...    |
+| ...    | 17                | 18    | ...    |
+| ...    | 19                | 20    | GND    |
+| ...    | 21                | 22    | ...    |
+| ...    | 23                | 24    | ...    |
+| GND    | 25                | 26    | ...    |
+| ...    | 27                | 28    | ...    |
+| ...    | 29                | 30    | GND    |
+| ...    | 31                | 32    | ...    |
+| ...    | 33                | 34    | GND    |
+| ...    | 35                | 36    | ...    |
+| ...    | 37                | 38    | ...    |
+| GND    | 39                | 40    | ...    |
+
+
+Colors for I2C bus hookup
+
+| funct | Color |
+|-------|-------|
+| VCC | YELLOW |
+| GND | ORANGE |
+| SCL | RED |
+| SDA| BROWN |
+
 # Software needed
 * pigpio library https://abyz.me.uk/rpi/pigpio/
 * smbus2 python module
