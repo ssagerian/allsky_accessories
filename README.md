@@ -9,10 +9,10 @@ A software service called temperatureMonitor.py sleeps for a minute then reads t
 
 
 
-| funct  | Pin                | Pin    | funct  |
-|--------|--------------------|--------|--------|
-| 3.3VDC | 1                  | 2      | 5VDC   |
-| SDA    | 3                  | 4      | 5VDC   |
+| funct  | Pin                | Pin    | funct  |                          
+|--------|--------------------|--------|--------|              
+| 3.3VDC | 1                  | 2      | 5VDC   |              
+| SDA    | 3                  | 4      | 5VDC   |             
 | SCL   | 5                  | 6      | ...   |
 | ...    | 7                | 8    | ...    |
 | GND    | 9                | 10    | ...    |
@@ -33,7 +33,7 @@ A software service called temperatureMonitor.py sleeps for a minute then reads t
 | GND    | 39                | 40    | ...    |
 
 
-Colors for I2C bus hookup
+### Colors for I2C bus hookup
 
 | funct | Color |
 |-------|-------|
@@ -41,6 +41,15 @@ Colors for I2C bus hookup
 | GND | ORANGE |
 | SCL | RED |
 | SDA| BROWN |
+
+
+### GPIO BCM? pin numbers
+
+| funct | BCM pin# |
+|-------|-------|
+| HEATER | 17 |
+| FAN    | 18 |
+
 
 # Software needed
 * pigpio library https://abyz.me.uk/rpi/pigpio/
@@ -55,7 +64,7 @@ make sure you enable the service > sudo systemctl enable pigpiod
 install smbus2 which is used by temperatureMonitor.py to read the si7020 I2C chip
 * pip3 install smbus2
 ## i2c tools
-you can install i2c-tools to debug your connections to the si chip
+you can install i2c-tools to debug your connections to the I2C chips
 * sudo apt-get install i2c-tools
 * sudo i2cdetect -y 1   # Use -y 0 for bus 0
 
