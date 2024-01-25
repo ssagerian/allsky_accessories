@@ -68,6 +68,21 @@ you can install i2c-tools to debug your connections to the I2C chips
 * sudo apt-get install i2c-tools
 * sudo i2cdetect -y 1   # Use -y 0 for bus 0
 
+## devices that are added to my allsky
+pi@raspberrypi:~ $ sudo i2cdetect -y 1
+   
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- 39 -- -- -- -- -- -- 
+40: 40 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- 76 --                         
+
+
 #Setup of the temperatureMonitory service
 * copy the temperatureMonitory.service to /etc/systemd/system/
 * enable the service
