@@ -104,11 +104,7 @@ class PhotoDiode:
         self.cumulative_sum = 0
 
     def set(self,value ):
-        # Simulate reading from the sensor (replace this with your actual logic)
-        # For example, use SMBus to read the word-sized value from the specified register_address
-        # For now, we'll just use a dummy value
         self.last_read = value
-
         # Update count and cumulative sum
         self.read_count += 1
         self.cumulative_sum += self.last_read
