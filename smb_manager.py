@@ -193,13 +193,13 @@ class DeviceTSL2560:
             self.command |= self.COMMAND
             self.command |= self.CONTROL_ADR
             data = self.CONTROL_POWER_ON
-            self.manager.m_byte_write_data(self.address, self.command, data)
+            self.manager.m_write_byte_data(self.address, self.command, data)
             time.sleep(0.2)
             # read id
             self.command = 0
             self.command |= self.COMMAND
             self.command |= self.ID_ADR
-            self.id = self.manager.m_byte_read_data(self.address, self.command)
+            self.id = self.manager.m_read_byte_data(self.address, self.command)
             id_str = f"{id_parts_map.get(self.id & 0xF0 )} version {self.id_parts_map.get(0x0F & self.id)}"
             self.manager.logger.info(id_str)
         except IOError as e:
@@ -212,11 +212,11 @@ class DeviceTSL2560:
         self.command |= self.COMMAND_IS_WORD_OP
         if channel_number == self.CHANNEL_0:
             self.command |= self.CHANNEL0_LSB_ADR
-            value = self.manager.m_byte_read_word_data(self.address, self.command)
+            value = self.manager.m_read_word_data(self.address, self.command)
             channel0.set(value)
         else:
             self.command |= self.CHANNEL1_LSB_ADR
-            value = self.manager.m_byte_read_word_data(self.address, self.command)
+            value = self.manager.m_read_word_data(self.address, self.command)
             channel1.set(value)
         return channel_number, value
 
