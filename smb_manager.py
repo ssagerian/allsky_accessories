@@ -1,4 +1,6 @@
-import smbus
+import smbus2
+import time
+import os
 import struct
 import json
 import logging
@@ -8,10 +10,10 @@ class I2CDeviceManager:
 
     ToDo:  put each bus access in a try block to catch errors related to device missing dead or whatever
     """
-    def __init__(self, bus_number=1, log_level=logging.INFO, allow_logging=true):
+    def __init__(self, bus_number=1, log_level=logging.INFO, allow_logging=True):
         self.ok_2_log = allow_logging
-        self.bus = smbus.SMBus(bus_number)
-        self.logger = self.setup_logger(log_level)
+        self.bus = smbus2.SMBus(bus_number)
+        self.logger = self.m_setup_logger(log_level)
 
     def m_logging_off(self):
         self.ok_2_log = False
@@ -19,10 +21,22 @@ class I2CDeviceManager:
     def m_logging_on(self):
         self.ok_2_log = True
 
+
     def m_setup_logger(self, log_level):
         logger = logging.getLogger("I2CDeviceManager")
         logger.setLevel(log_level)
-        # Configure your desired logging format and handlers here
+        # Create a log directory if it doesn't exist
+        log_dir = "logs"
+        os.makedirs(log_dir, exist_ok=True)
+        # Configure a file handler
+        log_file = os.path.join(log_dir, "i2c_device_manager.log")
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setLevel(log_level)
+        # Configure your desired logging format
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        # Add the file handler to the logger
+        logger.addHandler(file_handler)
         return logger
 
     def m_write_byte(self, address,  value):
@@ -49,7 +63,7 @@ class I2CDeviceManager:
         """ master override of smb bus write byte data """
         self.bus.write_byte_data(address, register, value)
         if self.ok_2_log:
-            self.logger.info(f"Read byte data from device at address {hex(address)}, register {hex(register)}: {hex(value)}")
+            self.logger.info(f"Write byte data to device at address {hex(address)}, register {hex(register)}: {hex(value)}")
         return value
 
 
@@ -73,6 +87,7 @@ class I2CDeviceManager:
             self.logger.info(f"Read word data from device at address {hex(address)}, register {hex(register)}: {hex(value)}")
         return value
 
+
     def m_write_block_data(self, address, register, block):
         """ master override of smb bus write block list data """
         if not isinstance(block, list):
@@ -90,8 +105,10 @@ class I2CDeviceManager:
             self.logger.info(f"Read word data from device at address {hex(address)}, register {hex(register)}: {hex(value)}")
         return value
 
+
     def to_json(self, data):
         return json.dumps(data)
+
 
 class PhotoDiode:
     def __init__(self):
@@ -102,6 +119,7 @@ class PhotoDiode:
         self.lower_threshold = 0
         self.read_count = 0
         self.cumulative_sum = 0
+
 
     def set(self,value ):
         self.last_read = value
@@ -148,6 +166,7 @@ class DeviceTSL2560:
     TIMING_MANUAL_STOP  = 0x03
     TIMING_INTEGRATION_13ms  = 0x00
     TIMING_INTEGRATION_101ms = 0x01
+    TIMING_INTEGRATION_400ms = 0x02
     TIMING_INTEGRATION_MANUAL = 0x03
 
     """ Interrupt Threshold register values"""
@@ -175,13 +194,13 @@ class DeviceTSL2560:
     """ Id and version register values"""
     ID_PART_NUMBER_BITS     = 0xF0
     ID_VERSION_NUMBER_BITS  = 0x0F
-    id_parts_map = {0: " TSL2560", 0x10: " TSL2561", 0xF0: "unknown"}
+    id_parts_map = {0: " TSL2560", 1: " TSL2561", 0xF0: "unknown"}
 
     """ channel defs"""
     CHANNEL_0 = 0
     CHANNEL_1 = 1
 
-    def __init__(self, manager, address=0x39, log=true):
+    def __init__(self, manager, address=0x39, log=True):
         self.manager = manager
         self.address = address
         self.channel0 = PhotoDiode()
@@ -190,34 +209,44 @@ class DeviceTSL2560:
         self.command = 0
         try:
             # power on
-            self.command |= self.COMMAND
-            self.command |= self.CONTROL_ADR
-            data = self.CONTROL_POWER_ON
+            self.command = (self.COMMAND | self.CONTROL_ADR)
+            #data = self.CONTROL_POWER_ON
+            data = 0 
             self.manager.m_write_byte_data(self.address, self.command, data)
-            time.sleep(0.2)
+            time.sleep(0.5)
+            self.command = (self.COMMAND | self.CONTROL_ADR)
+            value = self.manager.m_read_byte_data(self.address, self.command)
+            self.manager.logger.info(f" control register read: {value}")
+
             # read id
-            self.command = 0
-            self.command |= self.COMMAND
-            self.command |= self.ID_ADR
+            self.command = (self.COMMAND | self.ID_ADR)
             self.id = self.manager.m_read_byte_data(self.address, self.command)
-            id_str = f"{id_parts_map.get(self.id & 0xF0 )} version {self.id_parts_map.get(0x0F & self.id)}"
+            id_str = f"Device : {self.id_parts_map.get((self.id & 0xF0)>>8)} version {0x0F & self.id}"
             self.manager.logger.info(id_str)
+            # set gain 
+            self.command = (self.COMMAND | self.TIMING_ADR)
+            data = (self.TIMING_GAIN_16X | self.TIMING_INTEGRATION_101ms) 
+            self.manager.m_write_byte_data(self.address, self.command, data)
         except IOError as e:
             print(f" Failed to initialize TSL2560-I2C device: {e}")
             exit(1)
 
     def get_channel(self, channel_number):
-        self.command = 0
-        self.command |= self.COMMAND
-        self.command |= self.COMMAND_IS_WORD_OP
+        valueL = 0
+        valueM = 0
         if channel_number == self.CHANNEL_0:
-            self.command |= self.CHANNEL0_LSB_ADR
-            value = self.manager.m_read_word_data(self.address, self.command)
-            channel0.set(value)
+            self.command = (self.COMMAND | self.CHANNEL0_LSB_ADR)
+            valueL = self.manager.m_read_byte_data(self.address, self.command)
+            self.command = (self.COMMAND | self.CHANNEL0_MSB_ADR)
+            valueM = self.manager.m_read_byte_data(self.address, self.command)
+            self.channel0.set((valueM << 8) + valueL)
         else:
-            self.command |= self.CHANNEL1_LSB_ADR
-            value = self.manager.m_read_word_data(self.address, self.command)
-            channel1.set(value)
+            self.command = (self.COMMAND | self.CHANNEL1_LSB_ADR)
+            valueL = self.manager.m_read_byte_data(self.address, self.command)
+            self.command = (self.COMMAND | self.CHANNEL1_MSB_ADR)
+            valueM = self.manager.m_read_byte_data(self.address, self.command)
+            self.channel1.set((valueM << 8) + valueL)
+        value = (valueM << 8) + valueL
         return channel_number, value
 
     def get_channel_average(self, channel_number):
@@ -228,18 +257,24 @@ class DeviceTSL2560:
         else:
             raise ValueError(f"channel number out of range {channel_number}.")
 
+
+
     def get_channel_0_lux(self):
         pass
+
 
     def isr_callback(self):
         pass
 
+
+
     def set_gain(self, high_gain=True):
         pass
 
+
     def start_integration_cycle(self):
         pass
-
+"""
 class DeviceSI7021:
     def __init__(self, manager, address=0x40):
         self.manager = manager
@@ -306,13 +341,21 @@ class DeviceSI7021:
         temperature_f = si7020_I2C.celsius_to_fahrenheit(temperature)
         return humidity, temperature_f
 
+"""
+
+
 # Example usage:
 manager = I2CDeviceManager()
-si7021 = DeviceSI7021(manager)
-device1 = Device1(manager, address=0x20)
+tsl2560 = DeviceTSL2560(manager)
 
-device1.set_gain(high_gain=True)
-device1.start_integration_cycle()
+for  i in range(0,9):
+    var0 = tsl2560.get_channel(0) 
+    var1 = tsl2560.get_channel(1) 
+    print( f" var0 {var0} var1 {var1}")
+#device1 = Device1(manager, address=0x20)
+print ("done")
+#device1.set_gain(high_gain=True)
+#device1.start_integration_cycle()
 
 #sensor_data = device2.read_sensor_data()
 #print(f"Sensor data from Device2: {sensor_data}")
