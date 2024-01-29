@@ -194,7 +194,7 @@ class DeviceTSL2560:
     """ Id and version register values"""
     ID_PART_NUMBER_BITS     = 0xF0
     ID_VERSION_NUMBER_BITS  = 0x0F
-    id_parts_map = {0: " TSL2560", 1: " TSL2561", 0xF0: "unknown"}
+    id_parts_map = {0: "TSL2560", 5: "TSL2561T", 0xF0: "unknown"}
 
     """ channel defs"""
     CHANNEL_0 = 0
@@ -210,8 +210,7 @@ class DeviceTSL2560:
         try:
             # power on
             self.command = (self.COMMAND | self.CONTROL_ADR)
-            #data = self.CONTROL_POWER_ON
-            data = 0 
+            data = self.CONTROL_POWER_ON
             self.manager.m_write_byte_data(self.address, self.command, data)
             time.sleep(0.5)
             self.command = (self.COMMAND | self.CONTROL_ADR)
@@ -221,7 +220,7 @@ class DeviceTSL2560:
             # read id
             self.command = (self.COMMAND | self.ID_ADR)
             self.id = self.manager.m_read_byte_data(self.address, self.command)
-            id_str = f"Device : {self.id_parts_map.get((self.id & 0xF0)>>8)} version {0x0F & self.id}"
+            id_str = f"Device : {self.id_parts_map.get((self.id & 0xF0)>>4)} version {int(0x0F & self.id)}"
             self.manager.logger.info(id_str)
             # set gain 
             self.command = (self.COMMAND | self.TIMING_ADR)
@@ -348,7 +347,7 @@ class DeviceSI7021:
 manager = I2CDeviceManager()
 tsl2560 = DeviceTSL2560(manager)
 
-for  i in range(0,9):
+for i in range(0,2):
     var0 = tsl2560.get_channel(0) 
     var1 = tsl2560.get_channel(1) 
     print( f" var0 {var0} var1 {var1}")
