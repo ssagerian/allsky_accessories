@@ -257,9 +257,36 @@ class DeviceTSL2560:
             raise ValueError(f"channel number out of range {channel_number}.")
 
 
+   def get_average_lux(self):
+        """
+        from page 24 of TSL2561 manual on how to calculate lux
+        For 0 < CH1/CH0 ≤ 0.50
+        Lux = 0.0304 × CH0 - 0.062 × CH0 × ((CH1/CH0) 1.4 )
+        For 0.50 < CH1/CH0 ≤ 0.61
+        Lux = 0.0224 × CH0 - 0.031 × CH1
+        For 0.61 < CH1/CH0 ≤ 0.80
+        Lux = 0.0128 × CH0 - 0.0153 × CH1
+        For 0.80 < CH1/CH0 ≤ 1.30
 
-    def get_channel_0_lux(self):
-        pass
+        Lux = 0.00146 × CH0 - 0.00112 × CH1
+
+        For CH1/CH0 > 1.30
+        Lux = 0
+        """
+        if self.channel1.ave_value > 0:
+            cratio = self.channel0.ave_value/ self.channel1.ave_value
+            if 0 < cratio <= 0.5:
+                lux = (0.0304 * self.channel0.ave_value) - (0.062 * self.channel0.ave_value) * pow(cratio, 1.40)
+            elif 0.50 < cratio <= 0.61:
+                lux = (0.0224 * self.channel0.ave_value) - (0.031 * self.channel1.ave_value)
+            elif 0.61 < cratio <= 0.80:
+                lux = (0.0128 * self.channel0.ave_value) - (0.0153 * self.channel1.ave_value)
+            elif 0.80 < cratio <= 1.30:
+                lux = (0.00146 * self.channel0.ave_value) - (0.00112 * self.channel1.ave_value)
+            else:
+                lux = 0
+            return lux
+        raise ValueError("last light sensor reading was zero")
 
 
     def isr_callback(self):
