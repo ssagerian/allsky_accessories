@@ -1,0 +1,137 @@
+2024-01-28 22:41:12,476 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-28 22:41:12,978 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-28 22:41:12,978 - INFO -  control register read: 51
+2024-01-28 22:41:12,979 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-28 22:41:12,980 - INFO - Device : TSL2561T version 0
+2024-01-28 22:41:12,981 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-28 22:45:54,291 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-28 22:45:54,793 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-28 22:45:54,794 - INFO -  control register read: 51
+2024-01-28 22:45:54,795 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-28 22:45:54,796 - INFO - Device : TSL2561T version 0
+2024-01-28 22:45:54,797 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-28 22:47:21,320 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-28 22:47:21,823 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-28 22:47:21,824 - INFO -  control register read: 51
+2024-01-28 22:47:21,825 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-28 22:47:21,827 - INFO - Device : TSL2561T version 0
+2024-01-28 22:47:21,828 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-28 23:05:41,841 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-28 23:05:42,343 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-28 23:05:42,344 - INFO -  control register read: 51
+2024-01-28 23:05:42,346 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-28 23:05:42,347 - INFO - Device : TSL2561T version 0
+2024-01-28 23:05:42,348 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-28 23:05:58,042 - INFO - Write byte to device at address 0x40, value : 0xfe
+2024-01-28 23:05:59,046 - INFO - Write byte data to device at address 0x40, register 0xe6: 0x4
+2024-01-28 23:06:00,050 - INFO - Read byte data from device at address 0x40, register 0xe7: 0x3e
+2024-01-28 23:10:15,965 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-28 23:10:16,467 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-28 23:10:16,468 - INFO -  control register read: 51
+2024-01-28 23:10:16,469 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-28 23:10:16,469 - INFO - Device : TSL2561T version 0
+2024-01-28 23:10:16,469 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-28 23:10:16,470 - INFO - Write byte to device at address 0x40, value : 0xfe
+2024-01-28 23:10:17,472 - INFO - Write byte data to device at address 0x40, register 0xe6: 0x4
+2024-01-28 23:10:18,474 - INFO - Read byte data from device at address 0x40, register 0xe7: 0x3e
+2024-01-28 23:10:18,475 - INFO - Si7020:VDD OK heater ON bit resolution RH: 12 bit, Temp: 14 bit
+2024-01-28 23:14:24,306 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-28 23:14:24,807 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-28 23:14:24,808 - INFO -  control register read: 51
+2024-01-28 23:14:24,809 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-28 23:14:24,809 - INFO - Device : TSL2561T version 0
+2024-01-28 23:14:24,809 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-28 23:14:24,810 - INFO - Write byte to device at address 0x40, value : 0xfe
+2024-01-28 23:14:25,812 - INFO - Write byte data to device at address 0x40, register 0xe6: 0x4
+2024-01-28 23:14:26,814 - INFO - Read byte data from device at address 0x40, register 0xe7: 0x3e
+2024-01-28 23:14:26,815 - INFO - Si7020:VDD OK heater ON bit resolution RH: 12 bit, Temp: 14 bit
+2024-01-28 23:14:26,833 - INFO - Read word data from device at address 0x40, register 0xe5: 0x4a50
+2024-01-28 23:14:26,834 - INFO - Read word data from device at address 0x40, register 0xe0: 0x9862
+2024-01-28 23:16:19,724 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-28 23:16:20,225 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-28 23:16:20,226 - INFO -  control register read: 51
+2024-01-28 23:16:20,227 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-28 23:16:20,227 - INFO - Device : TSL2561T version 0
+2024-01-28 23:16:20,227 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-28 23:16:20,228 - INFO - Write byte to device at address 0x40, value : 0xfe
+2024-01-28 23:16:21,230 - INFO - Write byte data to device at address 0x40, register 0xe6: 0x4
+2024-01-28 23:16:22,237 - INFO - Read byte data from device at address 0x40, register 0xe7: 0x3e
+2024-01-28 23:16:22,238 - INFO - Si7020:VDD OK heater ON bit resolution RH: 12 bit, Temp: 14 bit
+2024-01-28 23:16:22,256 - INFO - Read word data from device at address 0x40, register 0xe5: 0x9e50
+2024-01-28 23:16:22,258 - INFO - Read word data from device at address 0x40, register 0xe0: 0x9062
+2024-01-28 23:16:22,259 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xda
+2024-01-28 23:16:22,261 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-28 23:16:22,262 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xae
+2024-01-28 23:16:22,263 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0
+2024-01-28 23:16:22,282 - INFO - Read word data from device at address 0x40, register 0xe5: 0x8e50
+2024-01-28 23:16:22,284 - INFO - Read word data from device at address 0x40, register 0xe0: 0x9462
+2024-01-28 23:16:22,285 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xda
+2024-01-28 23:16:22,287 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-28 23:16:22,288 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xae
+2024-01-28 23:16:22,289 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0
+2024-01-29 17:12:19,791 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-29 17:12:20,293 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-29 17:12:20,294 - INFO -  control register read: 51
+2024-01-29 17:12:20,294 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-29 17:12:20,294 - INFO - Device : TSL2561T version 0
+2024-01-29 17:12:20,295 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-29 17:12:20,295 - INFO - Write byte to device at address 0x40, value : 0xfe
+2024-01-29 17:12:21,297 - INFO - Write byte data to device at address 0x40, register 0xe6: 0x4
+2024-01-29 17:12:22,300 - INFO - Read byte data from device at address 0x40, register 0xe7: 0x3e
+2024-01-29 17:12:22,301 - INFO - Si7020:VDD OK heater ON bit resolution RH: 12 bit, Temp: 14 bit
+2024-01-29 17:12:22,319 - INFO - Read word data from device at address 0x40, register 0xe5: 0x2650
+2024-01-29 17:12:22,320 - INFO - Read word data from device at address 0x40, register 0xe0: 0x1c62
+2024-01-29 17:12:22,321 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xd5
+2024-01-29 17:12:22,323 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-29 17:12:22,324 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xad
+2024-01-29 17:12:22,325 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0
+2024-01-29 17:12:22,343 - INFO - Read word data from device at address 0x40, register 0xe5: 0xe50
+2024-01-29 17:12:22,344 - INFO - Read word data from device at address 0x40, register 0xe0: 0x2462
+2024-01-29 17:12:22,346 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xd5
+2024-01-29 17:12:22,347 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-29 17:12:22,348 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xad
+2024-01-29 17:12:22,349 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0
+2024-01-29 17:16:04,644 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-29 17:16:05,145 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-29 17:16:05,146 - INFO -  control register read: 51
+2024-01-29 17:16:05,147 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-29 17:16:05,147 - INFO - Device : TSL2561T version 0
+2024-01-29 17:16:05,147 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-29 17:16:05,148 - INFO - Write byte to device at address 0x40, value : 0xfe
+2024-01-29 17:16:06,150 - INFO - Write byte data to device at address 0x40, register 0xe6: 0x4
+2024-01-29 17:16:07,152 - INFO - Read byte data from device at address 0x40, register 0xe7: 0x3e
+2024-01-29 17:16:07,153 - INFO - Si7020:VDD OK heater ON bit resolution RH: 12 bit, Temp: 14 bit
+2024-01-29 17:16:07,171 - INFO - Read word data from device at address 0x40, register 0xe5: 0xfe50
+2024-01-29 17:16:07,172 - INFO - Read word data from device at address 0x40, register 0xe0: 0x862
+2024-01-29 17:16:07,173 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xd1
+2024-01-29 17:16:07,175 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-29 17:16:07,176 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xad
+2024-01-29 17:16:07,177 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0
+2024-01-29 17:16:07,195 - INFO - Read word data from device at address 0x40, register 0xe5: 0xee50
+2024-01-29 17:16:07,196 - INFO - Read word data from device at address 0x40, register 0xe0: 0x1062
+2024-01-29 17:16:07,198 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xd3
+2024-01-29 17:16:07,199 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-29 17:16:07,200 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xad
+2024-01-29 17:16:07,201 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0
+2024-01-29 17:17:21,954 - INFO - Write byte data to device at address 0x39, register 0x80: 0x3
+2024-01-29 17:17:22,456 - INFO - Read byte data from device at address 0x39, register 0x80: 0x33
+2024-01-29 17:17:22,456 - INFO -  control register read: 51
+2024-01-29 17:17:22,457 - INFO - Read byte data from device at address 0x39, register 0x8a: 0x50
+2024-01-29 17:17:22,457 - INFO - Device : TSL2561T version 0
+2024-01-29 17:17:22,458 - INFO - Write byte data to device at address 0x39, register 0x81: 0x11
+2024-01-29 17:17:22,458 - INFO - Write byte to device at address 0x40, value : 0xfe
+2024-01-29 17:17:23,460 - INFO - Write byte data to device at address 0x40, register 0xe6: 0x4
+2024-01-29 17:17:24,463 - INFO - Read byte data from device at address 0x40, register 0xe7: 0x3e
+2024-01-29 17:17:24,463 - INFO - Si7020:VDD OK heater ON bit resolution RH: 12 bit, Temp: 14 bit
+2024-01-29 17:17:24,482 - INFO - Read word data from device at address 0x40, register 0xe5: 0x9a50
+2024-01-29 17:17:24,483 - INFO - Read word data from device at address 0x40, register 0xe0: 0x862
+2024-01-29 17:17:24,484 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xd5
+2024-01-29 17:17:24,485 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-29 17:17:24,486 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xad
+2024-01-29 17:17:24,487 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0
+2024-01-29 17:17:24,506 - INFO - Read word data from device at address 0x40, register 0xe5: 0x9250
+2024-01-29 17:17:24,507 - INFO - Read word data from device at address 0x40, register 0xe0: 0xc62
+2024-01-29 17:17:24,508 - INFO - Read byte data from device at address 0x39, register 0x8c: 0xd5
+2024-01-29 17:17:24,510 - INFO - Read byte data from device at address 0x39, register 0x8d: 0x5
+2024-01-29 17:17:24,511 - INFO - Read byte data from device at address 0x39, register 0x8e: 0xad
+2024-01-29 17:17:24,512 - INFO - Read byte data from device at address 0x39, register 0x8f: 0x0

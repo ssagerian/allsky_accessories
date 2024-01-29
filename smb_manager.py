@@ -339,11 +339,11 @@ class DeviceTSL2560:
 
 class DeviceSI7021:
 
-    self.TEMPERATURE_COMMAND = 0xF3
-    self.HUMIDITY_COMMAND = 0xF5
     def __init__(self, manager, address=0x40):
         self.manager = manager
         self.address = address
+        self.TEMPERATURE_COMMAND = 0xF3
+        self.HUMIDITY_COMMAND = 0xF5
         heater_map = {0: "OFF", 1: "ON"}
         vdd_map = {0: "OK", 1: "LOW!"}
         resolution_mapping = {
@@ -354,8 +354,8 @@ class DeviceSI7021:
         }
         try:
             self.address = address
-            self.temperatureCmd = 0xF3 
-            self.humidityCmd = 0xF5 
+            self.temperatureCmd = self.TEMPERATURE_COMMAND 
+            self.humidityCmd = self.HUMIDITY_COMMAND 
             try:
                 # init chip
                 self.manager.m_write_byte(self.address, 0xFE)  # reset sensor
@@ -413,7 +413,7 @@ tsl2560 = DeviceTSL2560(manager)
 si7021 = DeviceSI7021(manager)
 
 for i in range(0,2):
-    t, h = si7021.get_humidity_and_temperatureF()
+    h, t = si7021.get_humidity_and_temperatureF()
     print(f" temperature {t} humidity {h}")
     var0 = tsl2560.get_channel(0) 
     var1 = tsl2560.get_channel(1) 
