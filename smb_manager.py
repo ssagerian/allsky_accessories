@@ -338,6 +338,9 @@ class DeviceTSL2560:
 
 
 class DeviceSI7021:
+
+    self.TEMPERATURE_COMMAND = 0xF3
+    self.HUMIDITY_COMMAND = 0xF5
     def __init__(self, manager, address=0x40):
         self.manager = manager
         self.address = address
