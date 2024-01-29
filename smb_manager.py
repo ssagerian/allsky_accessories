@@ -332,7 +332,8 @@ class DeviceTSL2560:
 
     def start_integration_cycle(self):
         pass
-"""
+
+
 class DeviceSI7021:
     def __init__(self, manager, address=0x40):
         self.manager = manager
@@ -351,11 +352,11 @@ class DeviceSI7021:
             self.humidityCmd = HUMIDITY_COMMAND
             try:
                 # init chip
-                self.manager.write_byte(self.address, 0xFE)  # reset sensor
+                self.manager.m_write_byte(self.address, 0xFE)  # reset sensor
                 time.sleep(1)
-                self.manager.write_byte_data(self.address, 0xE6, 0x04)  # heater on Temp Resolution == 12 bits, RH= 8 bits
+                self.manager.m_write_byte_data(self.address, 0xE6, 0x04)  # heater on Temp Resolution == 12 bits, RH= 8 bits
                 time.sleep(1)
-                read_data = self.manager.read_byte_data(self.address, 0xE7)  # read register 1
+                read_data = self.manager.m_read_byte_data(self.address, 0xE7)  # read register 1
                 heater_state = heater_map.get(((read_data & 0x04) >> 2), "?")
                 vdd_status = vdd_map.get(((read_data & 0x40) >> 5), "?")
                 rh_resolution = (read_data & 0x80) >> 6
@@ -372,7 +373,7 @@ class DeviceSI7021:
             exit(1)
 
     def get_temperature(self):
-        temp = self.manager.read_word_data(self.address, 0xE0)  # read temp from last humidity conversion
+        temp = self.manager.m_read_word_data(self.address, 0xE0)  # read temp from last humidity conversion
         temp = ((0x00FF & temp) << 8) + ((0xFF00 & temp) >> 8)
         temperature = ((175.72 * temp) / 65536) - 46.85
         return temperature
@@ -388,7 +389,7 @@ class DeviceSI7021:
         return celsius
 
     def get_humidity(self):
-        humd = self.manager.read_word_data(self.address, 0xE5)
+        humd = self.manager.m_read_word_data(self.address, 0xE5)
         humd = ((0x00FF & humd) << 8) + ((0xFF00 & humd) >> 8)
         humidity = ((125 * humd) / 65536) - 6
         return humidity
@@ -405,8 +406,11 @@ class DeviceSI7021:
 # Example usage:
 manager = I2CDeviceManager()
 tsl2560 = DeviceTSL2560(manager)
+si7021 = DeviceSI7021(manager)
 
 for i in range(0,2):
+    t, h = si7021.get_humidity_and_temperature()
+    print( f" temperature {t} humidity {h}")
     var0 = tsl2560.get_channel(0) 
     var1 = tsl2560.get_channel(1) 
     print( f" var0 {var0} var1 {var1}")
