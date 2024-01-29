@@ -335,6 +335,9 @@ class DeviceTSL2560:
 
 
 class DeviceSI7021:
+
+    self.TEMPERATURE_COMMAND = 0xF3
+    self.HUMIDITY_COMMAND = 0xF5
     def __init__(self, manager, address=0x40):
         self.manager = manager
         self.address = address
@@ -348,8 +351,8 @@ class DeviceSI7021:
         }
         try:
             self.address = address
-            self.temperatureCmd = TEMPERATURE_COMMAND
-            self.humidityCmd = HUMIDITY_COMMAND
+            self.temperatureCmd = self.TEMPERATURE_COMMAND
+            self.humidityCmd = self.HUMIDITY_COMMAND
             try:
                 # init chip
                 self.manager.m_write_byte(self.address, 0xFE)  # reset sensor
