@@ -248,6 +248,7 @@ class DeviceTSL2560:
         value = (valueM << 8) + valueL
         return channel_number, value
 
+
     def get_channel_average(self, channel_number):
         if channel_number == self.channel0:
             return self.channel0.ave_value
@@ -286,10 +287,11 @@ class DeviceTSL2560:
             else:
                 lux = 0
             return lux
-        raise ValueError("last light sensor reading was zero")
+        else:
+            raise ValueError("last light sensor reading was zero")
 
 
-   def get_average_lux(self):
+    def get_average_lux(self):
         """
         from page 24 of TSL2561 manual on how to calculate lux
         For 0 < CH1/CH0 ≤ 0.50
@@ -318,7 +320,8 @@ class DeviceTSL2560:
             else:
                 lux = 0
             return lux
-        raise ValueError("last light sensor reading was zero")
+        else:
+            raise ValueError("last light sensor reading was zero")
 
 
     def isr_callback(self):
@@ -348,8 +351,8 @@ class DeviceSI7021:
         }
         try:
             self.address = address
-            self.temperatureCmd = TEMPERATURE_COMMAND
-            self.humidityCmd = HUMIDITY_COMMAND
+            self.temperatureCmd = 0xF3 
+            self.humidityCmd = 0xF5 
             try:
                 # init chip
                 self.manager.m_write_byte(self.address, 0xFE)  # reset sensor
@@ -362,8 +365,8 @@ class DeviceSI7021:
                 rh_resolution = (read_data & 0x80) >> 6
                 temp_resolution = read_data & 0x01
                 resolution_description = resolution_mapping.get((rh_resolution, temp_resolution), "Unknown Resolution")
-                print(f"Si7020:VDD {vdd_status} heater {heater_state} bit resolution {resolution_description}")
-                syslog.syslog(syslog.LOG_INFO, f"Si7020:VDD {vdd_status} heater {heater_state} bit resolution {resolution_description}")
+                log_str = f"Si7020:VDD {vdd_status} heater {heater_state} bit resolution {resolution_description}"
+                self.manager.logger.info(log_str)
 
             except IOError as e:
                 print(f"1 Failed to initialize si7020 I2C device: {e}")
@@ -397,10 +400,8 @@ class DeviceSI7021:
     def get_humidity_and_temperatureF(self):  # Call temperature and humidity functions
         humidity = self.get_humidity()
         temperature = self.get_temperature()
-        temperature_f = si7020_I2C.celsius_to_fahrenheit(temperature)
+        temperature_f = DeviceSI7021.celsius_to_fahrenheit(temperature)
         return humidity, temperature_f
-
-"""
 
 
 # Example usage:
@@ -409,15 +410,12 @@ tsl2560 = DeviceTSL2560(manager)
 si7021 = DeviceSI7021(manager)
 
 for i in range(0,2):
-    t, h = si7021.get_humidity_and_temperature()
-    print( f" temperature {t} humidity {h}")
+    t, h = si7021.get_humidity_and_temperatureF()
+    print(f" temperature {t} humidity {h}")
     var0 = tsl2560.get_channel(0) 
     var1 = tsl2560.get_channel(1) 
-    print( f" var0 {var0} var1 {var1}")
-#device1 = Device1(manager, address=0x20)
-print ("done")
-#device1.set_gain(high_gain=True)
-#device1.start_integration_cycle()
+    print(f" var0 {var0} var1 {var1}")
 
-#sensor_data = device2.read_sensor_data()
-#print(f"Sensor data from Device2: {sensor_data}")
+print ("done")
+
+
