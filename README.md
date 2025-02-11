@@ -86,6 +86,27 @@ pi@raspberrypi:~ $ sudo i2cdetect -y 1
 | 60:|  -- |  -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
 | 70:|  -- |  -- | -- | -- | -- | 76 | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
 
+#adjusting the focus of the RPI Camera
+
+#Notes on makeing RPI headless
+## change /boot/firmware/config.txt
+sudo vi /boot/firmware/config.txt
+hdmi_force_hotplug=1
+hdmi_group=2
+hdmi_mode=82
+save the file then..
+
+## run raspi-config
+sudo raspi-config
+make sure vnc server is enabled and 
+Navigate to..
+    System Options → Boot / Auto Login
+    Select Desktop (GUI) with automatic login.
+    reboot 
+
+that should make your raspberry pi headless, ie you should beable to connect to it via realvnc and see the graphical desktop
+with that, you should be able to launch a terminal and test the focus of the cameara by running
+libcarmera-hello -t 0 
 
 
 #Setup of the temperatureMonitory service
