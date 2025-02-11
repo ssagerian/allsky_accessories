@@ -87,9 +87,9 @@ pi@raspberrypi:~ $ sudo i2cdetect -y 1
 | 70:|  -- |  -- | -- | -- | -- | 76 | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
 
 
-#adjusting the focus of the RPI Camera
+# adjusting the focus of the RPI Camera
 
-##Notes on makeing RPI headless
+## Notes on makeing RPI headless
 change /boot/firmware/config.txt
 sudo vi /boot/firmware/config.txt
 hdmi_force_hotplug=1
