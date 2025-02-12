@@ -1,3 +1,5 @@
 # Type  Message  Command                                        Color   FA icon  Button  Label
-button	-	/home/pi/allsky/scripts/dew_toggle.sh	green	random	'Toggle dew heater "
-button	-	/home/pi/allsky/scripts/fan_toggle.sh	green	random	'Toggle fan"
+button	-	/home/pi/allsky_support/dew_toggle.sh	red	random	'Toggle dew heater "
+button	-	/home/pi/allsky_support/fan_toggle.sh	red	random	'Toggle fan"
+button	-	/home/pi/allsky_support/dew_status.sh	green	random	'state of dew heater "
+button	-	/home/pi/allsky_support/fan_status.sh	green	random	'state of fan"
