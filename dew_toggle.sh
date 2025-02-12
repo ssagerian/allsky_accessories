@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/usr/bin/bash
 
-# Check if a GPIO pin number is provided as a command-line argument
-#if [ $# -eq 0 ]; then
-#    echo "Usage: $0 <gpio_pin>"
-#    exit 1
-#fi
+# Check if pigpiod is running, and start it if not
+if ! pgrep -x "pigpiod" > /dev/null; then
+    echo "pigpiod not running, starting it..."
+    sudo pigpiod
+    sleep 1  # Give it a moment to start
+fi
 
 # GPIO pin number
 gpio_pin=17
