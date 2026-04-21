@@ -107,7 +107,7 @@ Navigate to..
 
 that should make your raspberry pi headless, ie you should beable to connect to it via realvnc and see the graphical desktop
 with that, you should be able to launch a terminal and test the focus of the cameara by running
-libcarmera-hello -t 0 
+rpicam-hello -t 0 --analoggain 8 --shutter 1000000
 
 
 #Setup of the temperatureMonitory service
