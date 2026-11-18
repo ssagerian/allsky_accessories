@@ -58,6 +58,13 @@ A software service called temperatureMonitor.py sleeps for a minute then reads t
 * 
 
 # pigpio
+sudo apt update
+sudo apt install build-essential git python3-setuptools
+cd ~
+git clone https://github.com/joan2937/pigpio.git
+cd pigpio
+make && sudo make install
+sudo ldconfig
 make sure you enable the service > sudo systemctl enable pigpiod 
 
 # smbus2 
